@@ -72,7 +72,8 @@ function sendHttpBasic<T extends SoapEnvelope>(
   password: string,
   timeout?: number,
   useHttps?: boolean,
-  rejectUnauthorized?: boolean
+  rejectUnauthorized?: boolean,
+  ca?: string | string[] | Buffer | Buffer[]
 ): Promise<T> {
   const httpModule: HttpModule = useHttps ? https : http;
   const options: http.RequestOptions | https.RequestOptions = {
@@ -86,7 +87,13 @@ function sendHttpBasic<T extends SoapEnvelope>(
       'User-Agent': 'NodeJS WinRM Client',
       'Content-Length': Buffer.byteLength(data),
     },
-    ...(useHttps && { rejectUnauthorized: rejectUnauthorized ?? true }),
+    ...(useHttps && {
+      rejectUnauthorized: rejectUnauthorized ?? true,
+      ...(ca && {
+        ca: Array.isArray(ca) ? ca : [ca],
+        checkServerIdentity: () => undefined,
+      }),
+    }),
   };
 
   logger.debug('Sending HTTP request (Basic)', { host, port, path, useHttps });
@@ -188,7 +195,8 @@ async function sendHttpNtlm<T extends SoapEnvelope>(
   password: string,
   timeout?: number,
   useHttps?: boolean,
-  rejectUnauthorized?: boolean
+  rejectUnauthorized?: boolean,
+  ca?: string | string[] | Buffer | Buffer[]
 ): Promise<T> {
   const parsed = parseUsername(username);
   const httpModule: HttpModule = useHttps ? https : http;
@@ -205,7 +213,13 @@ async function sendHttpNtlm<T extends SoapEnvelope>(
   const agentOptions = {
     keepAlive: true,
     maxSockets: 1,
-    ...(useHttps && { rejectUnauthorized: rejectUnauthorized ?? true }),
+    ...(useHttps && {
+      rejectUnauthorized: rejectUnauthorized ?? true,
+      ...(ca && {
+        ca: Array.isArray(ca) ? ca : [ca],
+        checkServerIdentity: () => undefined,
+      }),
+    }),
   };
   const agent = useHttps
     ? new https.Agent(agentOptions)
@@ -222,7 +236,13 @@ async function sendHttpNtlm<T extends SoapEnvelope>(
       'User-Agent': 'NodeJS WinRM Client',
       Connection: 'keep-alive',
     },
-    ...(useHttps && { rejectUnauthorized: rejectUnauthorized ?? true }),
+    ...(useHttps && {
+      rejectUnauthorized: rejectUnauthorized ?? true,
+      ...(ca && {
+        ca: Array.isArray(ca) ? ca : [ca],
+        checkServerIdentity: () => undefined,
+      }),
+    }),
   };
 
   try {
@@ -332,7 +352,8 @@ export function sendHttp<T extends SoapEnvelope>(
   authMethod: AuthMethod,
   timeout?: number,
   useHttps?: boolean,
-  rejectUnauthorized?: boolean
+  rejectUnauthorized?: boolean,
+  ca?: string | string[] | Buffer | Buffer[]
 ): Promise<T> {
   if (authMethod === 'ntlm') {
     return sendHttpNtlm<T>(
@@ -344,7 +365,8 @@ export function sendHttp<T extends SoapEnvelope>(
       password,
       timeout,
       useHttps,
-      rejectUnauthorized
+      rejectUnauthorized,
+      ca
     );
   }
   return sendHttpBasic<T>(
@@ -356,6 +378,7 @@ export function sendHttp<T extends SoapEnvelope>(
     password,
     timeout,
     useHttps,
-    rejectUnauthorized
+    rejectUnauthorized,
+    ca
   );
 }

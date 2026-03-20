@@ -21,7 +21,8 @@ function createWinRMParams(
   username: string,
   password: string,
   useHttps?: boolean,
-  rejectUnauthorized?: boolean
+  rejectUnauthorized?: boolean,
+  ca?: string | string[] | Buffer | Buffer[]
 ): WinRMParams {
   return {
     host,
@@ -32,6 +33,7 @@ function createWinRMParams(
     authMethod: detectAuthMethod(username),
     useHttps,
     rejectUnauthorized,
+    ca,
   };
 }
 
@@ -55,7 +57,8 @@ export async function runCommand(
   port: number,
   usePowershell = false,
   useHttps = false,
-  rejectUnauthorized = true
+  rejectUnauthorized = true,
+  ca: string | string[] | Buffer | Buffer[] | undefined = undefined
 ): Promise<string> {
   const logger = createLogger('runCommand');
   const params = createWinRMParams(
@@ -64,7 +67,8 @@ export async function runCommand(
     username,
     password,
     useHttps,
-    rejectUnauthorized
+    rejectUnauthorized,
+    ca
   );
 
   logger.debug('Using auth method', { authMethod: params.authMethod });
@@ -111,7 +115,8 @@ export async function runPowershell(
   password: string,
   port: number,
   useHttps = false,
-  rejectUnauthorized = true
+  rejectUnauthorized = true,
+  ca: string | string[] | Buffer | Buffer[] | undefined = undefined
 ): Promise<string> {
   return runCommand(
     command,
@@ -121,7 +126,8 @@ export async function runPowershell(
     port,
     true,
     useHttps,
-    rejectUnauthorized
+    rejectUnauthorized,
+    ca
   );
 }
 
@@ -151,7 +157,8 @@ export async function runInteractiveCommand(
   httpTimeout?: number,
   pollInterval?: number,
   useHttps = false,
-  rejectUnauthorized = true
+  rejectUnauthorized = true,
+  ca: string | string[] | Buffer | Buffer[] | undefined = undefined
 ): Promise<string> {
   const logger = createLogger('runInteractiveCommand');
   const params = createWinRMParams(
@@ -160,7 +167,8 @@ export async function runInteractiveCommand(
     username,
     password,
     useHttps,
-    rejectUnauthorized
+    rejectUnauthorized,
+    ca
   );
 
   logger.debug('Using auth method', { authMethod: params.authMethod });
@@ -224,7 +232,8 @@ export async function runInteractivePowershell(
   httpTimeout?: number,
   pollInterval?: number,
   useHttps = false,
-  rejectUnauthorized = true
+  rejectUnauthorized = true,
+  ca: string | string[] | Buffer | Buffer[] | undefined = undefined
 ): Promise<string> {
   const logger = createLogger('runInteractivePowershell');
   const params = createWinRMParams(
@@ -233,7 +242,8 @@ export async function runInteractivePowershell(
     username,
     password,
     useHttps,
-    rejectUnauthorized
+    rejectUnauthorized,
+    ca
   );
 
   logger.debug('Using auth method', { authMethod: params.authMethod });

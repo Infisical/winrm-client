@@ -20,6 +20,8 @@ export interface WinRMParams {
   useHttps?: boolean;
   /** Reject unauthorized certificates (self-signed). Default: true. Set to false for self-signed certs. */
   rejectUnauthorized?: boolean;
+  /** CA certificate(s) to trust for HTTPS connections */
+  ca?: string | string[] | Buffer | Buffer[];
   message_id?: string;
   action?: string;
   shellId?: string;

@@ -1,0 +1,9 @@
+src/
+tests/
+examples/
+scripts/
+jest.config.ts
+tsconfig.json
+eslint.config.js
+azure-pipelines.yml
+.husky/

@@ -66,5 +66,5 @@ typings/
 # next.js build output
 .next
 
-# TypeScript build output
-dist/
+# TypeScript build output (committed for git dependency support)
+# dist/

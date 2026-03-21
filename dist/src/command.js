@@ -93,12 +93,12 @@ function buildSendInputRequest(params) {
 }
 async function doExecuteCommand(params) {
     const req = buildRunCommandRequest(params);
-    const result = await (0, http_1.sendHttp)(req, params.host, params.port, params.path, params.username, params.password, params.authMethod, params.httpTimeout, params.useHttps, params.rejectUnauthorized, params.ca);
+    const result = await (0, http_1.sendHttp)(req, params.host, params.port, params.path, params.username, params.password, params.authMethod, params.httpTimeout, params.useHttps, params.rejectUnauthorized, params.ca, params.servername);
     return (0, xml_parser_1.extractCommandId)(result);
 }
 async function doSendInput(params) {
     const req = buildSendInputRequest(params);
-    const result = await (0, http_1.sendHttp)(req, params.host, params.port, params.path, params.username, params.password, params.authMethod, params.httpTimeout, params.useHttps, params.rejectUnauthorized, params.ca);
+    const result = await (0, http_1.sendHttp)(req, params.host, params.port, params.path, params.username, params.password, params.authMethod, params.httpTimeout, params.useHttps, params.rejectUnauthorized, params.ca, params.servername);
     (0, xml_parser_1.extractSendResult)(result);
 }
 function generatePowershellCommand(params, interactive = false) {
@@ -116,7 +116,7 @@ async function doExecutePowershell(params, interactive = false) {
 }
 async function doReceiveOutput(params) {
     const req = buildReceiveOutputRequest(params);
-    const result = await (0, http_1.sendHttp)(req, params.host, params.port, params.path, params.username, params.password, params.authMethod, params.httpTimeout, params.useHttps, params.rejectUnauthorized, params.ca);
+    const result = await (0, http_1.sendHttp)(req, params.host, params.port, params.path, params.username, params.password, params.authMethod, params.httpTimeout, params.useHttps, params.rejectUnauthorized, params.ca, params.servername);
     const streams = (0, xml_parser_1.extractStreams)(result);
     let successOutput = '';
     let failedOutput = '';
@@ -147,7 +147,7 @@ async function doReceiveOutput(params) {
 async function doReceiveOutputNonBlocking(params) {
     const req = buildReceiveOutputRequest(params);
     logger.debug('doReceiveOutputNonBlocking', { req, params });
-    const result = await (0, http_1.sendHttp)(req, params.host, params.port, params.path, params.username, params.password, params.authMethod, params.httpTimeout, params.useHttps, params.rejectUnauthorized, params.ca);
+    const result = await (0, http_1.sendHttp)(req, params.host, params.port, params.path, params.username, params.password, params.authMethod, params.httpTimeout, params.useHttps, params.rejectUnauthorized, params.ca, params.servername);
     const streams = (0, xml_parser_1.extractStreams)(result);
     let output = '';
     let stderr = '';

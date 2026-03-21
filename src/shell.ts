@@ -82,7 +82,8 @@ export async function doCreateShell(params: WinRMParams): Promise<string> {
     undefined,
     params.useHttps,
     params.rejectUnauthorized,
-    params.ca
+    params.ca,
+    params.servername
   );
 
   const shellId = extractShellId(result);
@@ -109,7 +110,8 @@ export async function doDeleteShell(params: WinRMParams): Promise<string> {
     undefined,
     params.useHttps,
     params.rejectUnauthorized,
-    params.ca
+    params.ca,
+    params.servername
   );
 
   checkForSoapFault(result);

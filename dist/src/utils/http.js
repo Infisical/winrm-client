@@ -94,7 +94,7 @@ function parseXmlResponse(dataBuffer) {
     return parser.parse(dataBuffer);
 }
 // ── HTTP helpers ────────────────────────────────────────────────────
-function sendHttpBasic(data, host, port, path, username, password, timeout, useHttps, rejectUnauthorized, ca) {
+function sendHttpBasic(data, host, port, path, username, password, timeout, useHttps, rejectUnauthorized, ca, servername) {
     const httpModule = useHttps ? https : http;
     const options = {
         host,
@@ -111,7 +111,7 @@ function sendHttpBasic(data, host, port, path, username, password, timeout, useH
             rejectUnauthorized: rejectUnauthorized ?? true,
             ...(ca && {
                 ca: Array.isArray(ca) ? ca : [ca],
-                checkServerIdentity: () => undefined,
+                ...(servername && { servername }),
             }),
         }),
     };
@@ -185,7 +185,7 @@ function extractAuthToken(headers) {
     return match ? match[1] : null;
 }
 // ── NTLM handshake ──────────────────────────────────────────────────
-async function sendHttpNtlm(data, host, port, path, username, password, timeout, useHttps, rejectUnauthorized, ca) {
+async function sendHttpNtlm(data, host, port, path, username, password, timeout, useHttps, rejectUnauthorized, ca, servername) {
     const parsed = (0, auth_1.parseUsername)(username);
     const httpModule = useHttps ? https : http;
     logger.debug('Sending HTTP request (NTLM)', {
@@ -203,7 +203,7 @@ async function sendHttpNtlm(data, host, port, path, username, password, timeout,
             rejectUnauthorized: rejectUnauthorized ?? true,
             ...(ca && {
                 ca: Array.isArray(ca) ? ca : [ca],
-                checkServerIdentity: () => undefined,
+                ...(servername && { servername }),
             }),
         }),
     };
@@ -225,7 +225,7 @@ async function sendHttpNtlm(data, host, port, path, username, password, timeout,
             rejectUnauthorized: rejectUnauthorized ?? true,
             ...(ca && {
                 ca: Array.isArray(ca) ? ca : [ca],
-                checkServerIdentity: () => undefined,
+                ...(servername && { servername }),
             }),
         }),
     };
@@ -289,9 +289,9 @@ async function sendHttpNtlm(data, host, port, path, username, password, timeout,
     }
 }
 // ── Public API ──────────────────────────────────────────────────────
-function sendHttp(data, host, port, path, username, password, authMethod, timeout, useHttps, rejectUnauthorized, ca) {
+function sendHttp(data, host, port, path, username, password, authMethod, timeout, useHttps, rejectUnauthorized, ca, servername) {
     if (authMethod === 'ntlm') {
-        return sendHttpNtlm(data, host, port, path, username, password, timeout, useHttps, rejectUnauthorized, ca);
+        return sendHttpNtlm(data, host, port, path, username, password, timeout, useHttps, rejectUnauthorized, ca, servername);
     }
-    return sendHttpBasic(data, host, port, path, username, password, timeout, useHttps, rejectUnauthorized, ca);
+    return sendHttpBasic(data, host, port, path, username, password, timeout, useHttps, rejectUnauthorized, ca, servername);
 }

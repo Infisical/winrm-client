@@ -67,7 +67,7 @@ async function doCreateShell(params) {
         authMethod: params.authMethod,
     });
     const req = buildCreateShellRequest();
-    const result = await (0, http_1.sendHttp)(req, params.host, params.port, params.path, params.username, params.password, params.authMethod, undefined, params.useHttps, params.rejectUnauthorized, params.ca);
+    const result = await (0, http_1.sendHttp)(req, params.host, params.port, params.path, params.username, params.password, params.authMethod, undefined, params.useHttps, params.rejectUnauthorized, params.ca, params.servername);
     const shellId = (0, xml_parser_1.extractShellId)(result);
     logger.debug('Shell created successfully', { shellId });
     return shellId;
@@ -78,7 +78,7 @@ async function doDeleteShell(params) {
         host: params.host,
     });
     const req = buildDeleteShellRequest(params);
-    const result = await (0, http_1.sendHttp)(req, params.host, params.port, params.path, params.username, params.password, params.authMethod, undefined, params.useHttps, params.rejectUnauthorized, params.ca);
+    const result = await (0, http_1.sendHttp)(req, params.host, params.port, params.path, params.username, params.password, params.authMethod, undefined, params.useHttps, params.rejectUnauthorized, params.ca, params.servername);
     (0, xml_parser_1.checkForSoapFault)(result);
     logger.debug('Shell deleted successfully', { shellId: params.shellId });
     return 'success';

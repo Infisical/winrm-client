@@ -49,7 +49,7 @@ const auth_1 = require("./src/utils/auth");
 /**
  * Create WinRM connection parameters with auto-detected authentication.
  */
-function createWinRMParams(host, port, username, password, useHttps, rejectUnauthorized, ca) {
+function createWinRMParams(host, port, username, password, useHttps, rejectUnauthorized, ca, servername) {
     return {
         host,
         port,
@@ -60,6 +60,7 @@ function createWinRMParams(host, port, username, password, useHttps, rejectUnaut
         useHttps,
         rejectUnauthorized,
         ca,
+        servername,
     };
 }
 /**
@@ -74,9 +75,9 @@ function createWinRMParams(host, port, username, password, useHttps, rejectUnaut
  * @param rejectUnauthorized - Reject self-signed certificates (default: true)
  * @returns Command output
  */
-async function runCommand(command, host, username, password, port, usePowershell = false, useHttps = false, rejectUnauthorized = true, ca = undefined) {
+async function runCommand(command, host, username, password, port, usePowershell = false, useHttps = false, rejectUnauthorized = true, ca = undefined, servername) {
     const logger = (0, logger_1.createLogger)('runCommand');
-    const params = createWinRMParams(host, port, username, password, useHttps, rejectUnauthorized, ca);
+    const params = createWinRMParams(host, port, username, password, useHttps, rejectUnauthorized, ca, servername);
     logger.debug('Using auth method', { authMethod: params.authMethod });
     let shellParams = null;
     try {
@@ -110,8 +111,8 @@ async function runCommand(command, host, username, password, port, usePowershell
  * @param rejectUnauthorized - Reject self-signed certificates (default: true)
  * @returns Command output
  */
-async function runPowershell(command, host, username, password, port, useHttps = false, rejectUnauthorized = true, ca = undefined) {
-    return runCommand(command, host, username, password, port, true, useHttps, rejectUnauthorized, ca);
+async function runPowershell(command, host, username, password, port, useHttps = false, rejectUnauthorized = true, ca = undefined, servername) {
+    return runCommand(command, host, username, password, port, true, useHttps, rejectUnauthorized, ca, servername);
 }
 /**
  * Execute an interactive command that responds to prompts via WinRM
@@ -128,9 +129,9 @@ async function runPowershell(command, host, username, password, port, useHttps =
  * @param rejectUnauthorized - Reject self-signed certificates (default: true)
  * @returns Command output
  */
-async function runInteractiveCommand(command, host, username, password, port, prompts, executionTimeout, httpTimeout, pollInterval, useHttps = false, rejectUnauthorized = true, ca = undefined) {
+async function runInteractiveCommand(command, host, username, password, port, prompts, executionTimeout, httpTimeout, pollInterval, useHttps = false, rejectUnauthorized = true, ca = undefined, servername) {
     const logger = (0, logger_1.createLogger)('runInteractiveCommand');
-    const params = createWinRMParams(host, port, username, password, useHttps, rejectUnauthorized, ca);
+    const params = createWinRMParams(host, port, username, password, useHttps, rejectUnauthorized, ca, servername);
     logger.debug('Using auth method', { authMethod: params.authMethod });
     let shellParams = null;
     try {
@@ -176,9 +177,9 @@ async function runInteractiveCommand(command, host, username, password, port, pr
  * @param rejectUnauthorized - Reject self-signed certificates (default: true)
  * @returns Command output
  */
-async function runInteractivePowershell(command, host, username, password, port, prompts, executionTimeout, httpTimeout, pollInterval, useHttps = false, rejectUnauthorized = true, ca = undefined) {
+async function runInteractivePowershell(command, host, username, password, port, prompts, executionTimeout, httpTimeout, pollInterval, useHttps = false, rejectUnauthorized = true, ca = undefined, servername) {
     const logger = (0, logger_1.createLogger)('runInteractivePowershell');
-    const params = createWinRMParams(host, port, username, password, useHttps, rejectUnauthorized, ca);
+    const params = createWinRMParams(host, port, username, password, useHttps, rejectUnauthorized, ca, servername);
     logger.debug('Using auth method', { authMethod: params.authMethod });
     let shellParams = null;
     try {

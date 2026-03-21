@@ -73,7 +73,8 @@ function sendHttpBasic<T extends SoapEnvelope>(
   timeout?: number,
   useHttps?: boolean,
   rejectUnauthorized?: boolean,
-  ca?: string | string[] | Buffer | Buffer[]
+  ca?: string | string[] | Buffer | Buffer[],
+  servername?: string
 ): Promise<T> {
   const httpModule: HttpModule = useHttps ? https : http;
   const options: http.RequestOptions | https.RequestOptions = {
@@ -91,7 +92,7 @@ function sendHttpBasic<T extends SoapEnvelope>(
       rejectUnauthorized: rejectUnauthorized ?? true,
       ...(ca && {
         ca: Array.isArray(ca) ? ca : [ca],
-        checkServerIdentity: () => undefined,
+        ...(servername && { servername }),
       }),
     }),
   };
@@ -196,7 +197,8 @@ async function sendHttpNtlm<T extends SoapEnvelope>(
   timeout?: number,
   useHttps?: boolean,
   rejectUnauthorized?: boolean,
-  ca?: string | string[] | Buffer | Buffer[]
+  ca?: string | string[] | Buffer | Buffer[],
+  servername?: string
 ): Promise<T> {
   const parsed = parseUsername(username);
   const httpModule: HttpModule = useHttps ? https : http;
@@ -217,7 +219,7 @@ async function sendHttpNtlm<T extends SoapEnvelope>(
       rejectUnauthorized: rejectUnauthorized ?? true,
       ...(ca && {
         ca: Array.isArray(ca) ? ca : [ca],
-        checkServerIdentity: () => undefined,
+        ...(servername && { servername }),
       }),
     }),
   };
@@ -240,7 +242,7 @@ async function sendHttpNtlm<T extends SoapEnvelope>(
       rejectUnauthorized: rejectUnauthorized ?? true,
       ...(ca && {
         ca: Array.isArray(ca) ? ca : [ca],
-        checkServerIdentity: () => undefined,
+        ...(servername && { servername }),
       }),
     }),
   };
@@ -353,7 +355,8 @@ export function sendHttp<T extends SoapEnvelope>(
   timeout?: number,
   useHttps?: boolean,
   rejectUnauthorized?: boolean,
-  ca?: string | string[] | Buffer | Buffer[]
+  ca?: string | string[] | Buffer | Buffer[],
+  servername?: string
 ): Promise<T> {
   if (authMethod === 'ntlm') {
     return sendHttpNtlm<T>(
@@ -366,7 +369,8 @@ export function sendHttp<T extends SoapEnvelope>(
       timeout,
       useHttps,
       rejectUnauthorized,
-      ca
+      ca,
+      servername
     );
   }
   return sendHttpBasic<T>(
@@ -379,6 +383,7 @@ export function sendHttp<T extends SoapEnvelope>(
     timeout,
     useHttps,
     rejectUnauthorized,
-    ca
+    ca,
+    servername
   );
 }

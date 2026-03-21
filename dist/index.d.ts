@@ -15,7 +15,7 @@ export { Shell, Command, monitorCommandOutput };
  * @param rejectUnauthorized - Reject self-signed certificates (default: true)
  * @returns Command output
  */
-export declare function runCommand(command: string, host: string, username: string, password: string, port: number, usePowershell?: boolean, useHttps?: boolean, rejectUnauthorized?: boolean, ca?: string | string[] | Buffer | Buffer[] | undefined): Promise<string>;
+export declare function runCommand(command: string, host: string, username: string, password: string, port: number, usePowershell?: boolean, useHttps?: boolean, rejectUnauthorized?: boolean, ca?: string | string[] | Buffer | Buffer[] | undefined, servername?: string): Promise<string>;
 /**
  * Execute a PowerShell command on a remote Windows machine via WinRM
  * @param command - PowerShell command to execute
@@ -27,7 +27,7 @@ export declare function runCommand(command: string, host: string, username: stri
  * @param rejectUnauthorized - Reject self-signed certificates (default: true)
  * @returns Command output
  */
-export declare function runPowershell(command: string, host: string, username: string, password: string, port: number, useHttps?: boolean, rejectUnauthorized?: boolean, ca?: string | string[] | Buffer | Buffer[] | undefined): Promise<string>;
+export declare function runPowershell(command: string, host: string, username: string, password: string, port: number, useHttps?: boolean, rejectUnauthorized?: boolean, ca?: string | string[] | Buffer | Buffer[] | undefined, servername?: string): Promise<string>;
 /**
  * Execute an interactive command that responds to prompts via WinRM
  * @param command - Command to execute
@@ -43,7 +43,7 @@ export declare function runPowershell(command: string, host: string, username: s
  * @param rejectUnauthorized - Reject self-signed certificates (default: true)
  * @returns Command output
  */
-export declare function runInteractiveCommand(command: string, host: string, username: string, password: string, port: number, prompts: InteractivePromptOutput[], executionTimeout?: number, httpTimeout?: number, pollInterval?: number, useHttps?: boolean, rejectUnauthorized?: boolean, ca?: string | string[] | Buffer | Buffer[] | undefined): Promise<string>;
+export declare function runInteractiveCommand(command: string, host: string, username: string, password: string, port: number, prompts: InteractivePromptOutput[], executionTimeout?: number, httpTimeout?: number, pollInterval?: number, useHttps?: boolean, rejectUnauthorized?: boolean, ca?: string | string[] | Buffer | Buffer[] | undefined, servername?: string): Promise<string>;
 /**
  * Execute an interactive PowerShell command that responds to prompts via WinRM
  * @param command - PowerShell command to execute
@@ -59,4 +59,4 @@ export declare function runInteractiveCommand(command: string, host: string, use
  * @param rejectUnauthorized - Reject self-signed certificates (default: true)
  * @returns Command output
  */
-export declare function runInteractivePowershell(command: string, host: string, username: string, password: string, port: number, prompts: InteractivePromptOutput[], executionTimeout?: number, httpTimeout?: number, pollInterval?: number, useHttps?: boolean, rejectUnauthorized?: boolean, ca?: string | string[] | Buffer | Buffer[] | undefined): Promise<string>;
+export declare function runInteractivePowershell(command: string, host: string, username: string, password: string, port: number, prompts: InteractivePromptOutput[], executionTimeout?: number, httpTimeout?: number, pollInterval?: number, useHttps?: boolean, rejectUnauthorized?: boolean, ca?: string | string[] | Buffer | Buffer[] | undefined, servername?: string): Promise<string>;

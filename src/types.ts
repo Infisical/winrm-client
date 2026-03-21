@@ -22,6 +22,8 @@ export interface WinRMParams {
   rejectUnauthorized?: boolean;
   /** CA certificate(s) to trust for HTTPS connections */
   ca?: string | string[] | Buffer | Buffer[];
+  /** Server name for TLS SNI and hostname verification when connecting through a proxy */
+  servername?: string;
   message_id?: string;
   action?: string;
   shellId?: string;
